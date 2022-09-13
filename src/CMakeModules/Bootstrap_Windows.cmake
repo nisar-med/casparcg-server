@@ -160,10 +160,10 @@ casparcg_add_runtime_dependency("${LIBERATION_FONTS_BIN_PATH}/LiberationMono-Reg
 
 # CEF
 if (ENABLE_HTML)
-	set(CEF_INCLUDE_PATH "${NUGET_PACKAGES_FOLDER}/casparcg.cef.sdk.95.0.1-MediaHandler.2467/CEF")
-	set(CEF_BIN_PATH "${NUGET_PACKAGES_FOLDER}/casparcg.cef.redist.x64.95.0.1-MediaHandler.2467/CEF")
-	set(CEF_RESOURCE_PATH "${NUGET_PACKAGES_FOLDER}/casparcg.cef.redist.x64.95.0.1-MediaHandler.2467/CEF")
-	link_directories("${NUGET_PACKAGES_FOLDER}/casparcg.cef.sdk.95.0.1-MediaHandler.2467/CEF/x64")
+	set(CEF_INCLUDE_PATH "${NUGET_PACKAGES_FOLDER}/casparcg.cef.sdk.103.0.0-5060-shared-textures.2591/CEF")
+	set(CEF_BIN_PATH "${NUGET_PACKAGES_FOLDER}/casparcg.cef.redist.x64.103.0.0-5060-shared-textures.2591/CEF")
+	set(CEF_RESOURCE_PATH "${NUGET_PACKAGES_FOLDER}/casparcg.cef.redist.x64.103.0.0-5060-shared-textures.2591/CEF")
+	link_directories("${NUGET_PACKAGES_FOLDER}/casparcg.cef.sdk.103.0.0-5060-shared-textures.2591/CEF/x64")
 
 	casparcg_add_runtime_dependency_dir("${CEF_RESOURCE_PATH}/locales")
 	casparcg_add_runtime_dependency("${CEF_RESOURCE_PATH}/chrome_100_percent.pak")
@@ -171,7 +171,6 @@ if (ENABLE_HTML)
 	casparcg_add_runtime_dependency("${CEF_RESOURCE_PATH}/resources.pak")
 	casparcg_add_runtime_dependency("${CEF_RESOURCE_PATH}/icudtl.dat")
 
-	casparcg_add_runtime_dependency_dir("${CEF_BIN_PATH}/swiftshader")
 	casparcg_add_runtime_dependency("${CEF_BIN_PATH}/snapshot_blob.bin")
 	casparcg_add_runtime_dependency("${CEF_BIN_PATH}/v8_context_snapshot.bin")
 	casparcg_add_runtime_dependency("${CEF_BIN_PATH}/libcef.dll")
