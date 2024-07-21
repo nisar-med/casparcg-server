@@ -36,6 +36,7 @@ FROM docker.io/nvidia/opengl:1.2-glvnd-devel-ubuntu22.04 as run-casparcg
 			fontconfig \
 			libavahi-client3 \
 			xvfb \
+      ffmpeg \
 			; \
 			rm -rf /var/lib/apt/lists/*
 
