@@ -1,4 +1,4 @@
-FROM buildpack-deps:jammy as build-casparcg
+FROM docker.io/buildpack-deps:jammy as build-casparcg
 	ADD tools/linux/install-dependencies /
 
 	RUN apt-get update && /install-dependencies
@@ -13,7 +13,7 @@ FROM buildpack-deps:jammy as build-casparcg
 	ARG CXX
 	ARG GIT_HASH
 
-	RUN cmake -GNinja /source
+	RUN cmake -GNinja -DENABLE_HTML=OFF /source
 
 	# ensure ffmpeg dependencies are installed
 	RUN apt-get update && ./_deps/ffmpeg-lib-src/ffmpeg/install-ffmpeg-dependencies
@@ -24,7 +24,7 @@ FROM buildpack-deps:jammy as build-casparcg
 	RUN ln -s /build/staging /staging && \
 		/source/shell/copy_deps.sh /staging/bin/casparcg /staging/lib
 
-FROM nvidia/opengl:1.2-glvnd-devel-ubuntu22.04
+FROM docker.io/nvidia/opengl:1.2-glvnd-devel-ubuntu22.04 as run-casparcg
 	COPY --from=build-casparcg /staging /opt/casparcg
 
 	RUN set -ex; \
@@ -34,10 +34,14 @@ FROM nvidia/opengl:1.2-glvnd-devel-ubuntu22.04
 			libc++1 \
 			libnss3 \
 			fontconfig \
+			libavahi-client3 \
+			xvfb \
 			; \
 			rm -rf /var/lib/apt/lists/*
 
 	WORKDIR /opt/casparcg
-
-	ADD tools/linux/run_docker.sh ./
-	CMD ["./run_docker.sh"]
+	COPY libs/libndi.so.5.6.1 ./lib/libndi.so.5
+	COPY tools/linux/scanner ./
+	ADD tools/linux/run_docker_xvfb.sh ./
+	RUN chmod +x ./run_docker_xvfb.sh
+	CMD ["./run_docker_xvfb.sh"]
