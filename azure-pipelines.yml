@@ -4,7 +4,7 @@
 
 trigger:
 - master
-- feat/cloud_port
+- feat/cloud-port
 
 resources:
 - repo: self
