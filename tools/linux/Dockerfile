@@ -3,20 +3,32 @@ FROM docker.io/buildpack-deps:jammy as build-casparcg
 
 	RUN apt-get update && /install-dependencies
 
-	RUN mkdir /source && mkdir /build && mkdir /install
+  ENV SRT_COMMIT 1.5.3
+  RUN wget https://github.com/Haivision/srt/archive/v${SRT_COMMIT}.tar.gz && \
+    tar zxf v${SRT_COMMIT}.tar.gz
+  WORKDIR /srt-${SRT_COMMIT}/build
+  RUN cmake .. -DCMAKE_INSTALL_PREFIX="/usr/local"
+  RUN make && make install
+  WORKDIR /
+	
+  RUN mkdir /source && mkdir /build && mkdir /install
 
 	COPY ./src /source
 
-	WORKDIR /build
 
 	ARG CC
 	ARG CXX
 	ARG GIT_HASH
 
-	RUN cmake -GNinja -DENABLE_HTML=OFF /source
+	RUN wget https://github.com/nisar-med/casparcg-dependencies/releases/download/ffmpeg/ffmpeg-n5.1.3_jammy.tar.gz
+  RUN tar -xzvf /ffmpeg-n5.1.3_jammy.tar.gz -C /tmp && \
+      cp -a -n /tmp/opt/ffmpeg/* /usr/local/ && \
+      ln -s /usr/local/lib/libsrt.so.1.5.3 /usr/lib/x86_64-linux-gnu/libsrt.so.1.5
 
+	WORKDIR /build
+  RUN cmake -GNinja -DENABLE_HTML=OFF -DUSE_SYSTEM_FFMPEG=ON /source
 	# ensure ffmpeg dependencies are installed
-	RUN apt-get update && ./_deps/ffmpeg-lib-src/ffmpeg/install-ffmpeg-dependencies
+	RUN apt-get update && /usr/local/install-ffmpeg-dependencies
 
 	RUN ninja
 
