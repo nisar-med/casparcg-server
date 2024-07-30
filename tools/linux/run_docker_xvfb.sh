@@ -1,3 +1,3 @@
 #!/bin/bash
-./scanner &
+./bin/scanner &
 xvfb-run ./run.sh

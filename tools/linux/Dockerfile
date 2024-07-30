@@ -32,7 +32,13 @@ FROM docker.io/buildpack-deps:jammy as build-casparcg
 
 	RUN ninja
 
-	# Find a better way to copy deps
+  RUN wget https://github.com/nisar-med/casparcg-media-scanner/releases/download/v1.3.4/scanner.tar.gz
+  RUN tar --strip-components=1 -xzvf scanner.tar.gz -C ./staging/bin/
+	
+  RUN wget https://github.com/nisar-med/casparcg-dependencies/releases/download/ndi/libndi.so.5.6.1.tar.gz
+  RUN tar -xzvf libndi.so.5.6.1.tar.gz && \
+      cp ./libndi.so.5.6.1 /usr/local/lib/
+  # Find a better way to copy deps
 	RUN ln -s /build/staging /staging && \
 		/source/shell/copy_deps.sh /staging/bin/casparcg /staging/lib
 
@@ -49,12 +55,12 @@ FROM docker.io/nvidia/opengl:1.2-glvnd-devel-ubuntu22.04 as run-casparcg
 			libavahi-client3 \
 			xvfb \
       ffmpeg \
+      wget \
 			; \
 			rm -rf /var/lib/apt/lists/*
 
 	WORKDIR /opt/casparcg
-	COPY libs/libndi.so.5.6.1 ./lib/libndi.so.5
-	COPY tools/linux/scanner ./
+	#COPY libs/libndi.so.5.6.1 ./lib/libndi.so.5
 	ADD tools/linux/run_docker_xvfb.sh ./
 	RUN chmod +x ./run_docker_xvfb.sh
 	CMD ["./run_docker_xvfb.sh"]
