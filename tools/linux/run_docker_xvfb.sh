@@ -1,3 +1,12 @@
 #!/bin/bash
 ./bin/scanner &
-xvfb-run ./run.sh
+
+start() {
+    xvfb-run ./run.sh
+    if [ $? -eq 0 ]; then
+        start
+    fi
+}
+
+start
+
