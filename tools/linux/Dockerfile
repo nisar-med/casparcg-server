@@ -26,7 +26,7 @@ FROM docker.io/buildpack-deps:jammy as build-casparcg
       ln -s /usr/local/lib/libsrt.so.1.5.3 /usr/lib/x86_64-linux-gnu/libsrt.so.1.5
 
 	WORKDIR /build
-  RUN cmake -GNinja -DENABLE_HTML=OFF -DUSE_SYSTEM_FFMPEG=ON /source
+  RUN cmake -GNinja -DUSE_SYSTEM_FFMPEG=ON /source
 	# ensure ffmpeg dependencies are installed
 	RUN apt-get update && /usr/local/install-ffmpeg-dependencies
 
