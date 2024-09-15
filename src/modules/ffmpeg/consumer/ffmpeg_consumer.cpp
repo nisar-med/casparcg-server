@@ -365,7 +365,7 @@ struct Stream
         if (in_frame) {
             if (enc->codec_type == AVMEDIA_TYPE_VIDEO) {
                 frame = make_av_video_frame(in_frame, format_desc);
-
+                if(0)
                 {
                     auto frame2                 = alloc_frame();
                     frame2->sample_aspect_ratio = frame->sample_aspect_ratio;
